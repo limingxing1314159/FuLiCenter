@@ -1,18 +1,9 @@
 package cn.ucai.fulicenter.bean;
 
-/**
- * Created by Administrator on 2016/10/13.
- */
-public class PropertiesBean {
-    /**
-     * id : 8514
-     * goodsId : 0
-     * colorId : 4
-     * colorName : 绿色
-     * colorCode : #59d85c
-     * colorImg : 201309/1380064997570506166.jpg
-     * colorUrl : https://cn.shopbop.com/alexa-chung-loretta-romper-ag/vp/v=1/1573999972.htm?fm=search-shopbysize&os=false
-     */
+import java.io.Serializable;
+import java.util.Arrays;
+
+public class PropertiesBean implements Serializable {
 
     private int id;
     private int goodsId;
@@ -21,6 +12,7 @@ public class PropertiesBean {
     private String colorCode;
     private String colorImg;
     private String colorUrl;
+    private AlbumsBean[] albums;
 
     public int getId() {
         return id;
@@ -78,7 +70,12 @@ public class PropertiesBean {
         this.colorUrl = colorUrl;
     }
 
-    public PropertiesBean() {
+    public AlbumsBean[] getAlbums() {
+        return albums;
+    }
+
+    public void setAlbums(AlbumsBean[] albums) {
+        this.albums = albums;
     }
 
     @Override
@@ -91,6 +88,7 @@ public class PropertiesBean {
                 ", colorCode='" + colorCode + '\'' +
                 ", colorImg='" + colorImg + '\'' +
                 ", colorUrl='" + colorUrl + '\'' +
+                ", albums=" + Arrays.toString(albums) +
                 '}';
     }
 }

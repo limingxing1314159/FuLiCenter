@@ -2,16 +2,17 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/list_background">
     <!-- 底部菜单栏-->
-    <RadioGroup
-        android:id="@+id/llMenu"
+    <LinearLayout
+        android:id="@+id/llayout"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="60dp"
         android:layout_alignParentBottom="true"
-        android:background="#fff"
+        android:background="@color/bottom_bar_taobao_bg"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
-
         <RadioButton
             android:id="@+id/btnNewGoods"
             style="@style/menu_item_style"
@@ -80,6 +81,20 @@
             android:text="我"
             android:button="@null"
             android:checked="false"/>
+    </LinearLayout>
 
-    </RadioGroup>
+    <View
+        android:id="@+id/vline"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_above="@id/llayout"
+        android:background="#D6DCDC"/>
+    <RelativeLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="1dp"
+        android:layout_above="@id/vline">
+
+    </RelativeLayout>
 </RelativeLayout>

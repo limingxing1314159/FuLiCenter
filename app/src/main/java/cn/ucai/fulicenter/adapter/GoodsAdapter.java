@@ -1,8 +1,8 @@
 package cn.ucai.fulicenter.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.support.v7.widget.RecyclerView.Adapter;
+import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -16,8 +16,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
-import cn.ucai.fulicenter.utils.ImageLoader;
 import cn.ucai.fulicenter.bean.NewGoodsBean;
+import cn.ucai.fulicenter.utils.ImageLoader;
 
 /**
  * Created by Administrator on 2016/10/17.
@@ -26,10 +26,10 @@ public class GoodsAdapter extends Adapter {
     Context mContext;
     List<NewGoodsBean> mList;
 
-    public GoodsAdapter(Context mContext, List<NewGoodsBean> list) {
-        this.mContext = mContext;
+    public GoodsAdapter(Context Context, List<NewGoodsBean> List) {
+        mContext = Context;
         mList = new ArrayList<>();
-        mList.addAll(list);
+        mList.addAll(List);
     }
 
     @Override
@@ -45,11 +45,11 @@ public class GoodsAdapter extends Adapter {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        if (getItemViewType(position) == I.TYPE_FOOTER) {
+        if (getItemViewType(position)==I.TYPE_FOOTER){
 
-        } else {
+        }else {
             GoodsViewHolder vh = (GoodsViewHolder) holder;
-            NewGoodsBean goods = mList.get(position);
+            NewGoodsBean goods =  mList.get(position);
             ImageLoader.downloadImg(mContext,vh.ivGoodsTh,goods.getGoodsThumb());
             vh.tvGoods.setText(goods.getGoodsName());
             vh.tvmoney.setText(goods.getCurrencyPrice());
@@ -70,14 +70,15 @@ public class GoodsAdapter extends Adapter {
     }
 
     public void initData(ArrayList<NewGoodsBean> list) {
-        if (mList!=null){
+        if (mList != null){
             mList.clear();
         }
         mList.addAll(list);
         notifyDataSetChanged();
     }
 
-    static class GoodsViewHolder extends ViewHolder {
+
+    static class GoodsViewHolder extends ViewHolder{
         @Bind(R.id.ivGoodsTh)
         ImageView ivGoodsTh;
         @Bind(R.id.tvGoods)
@@ -93,7 +94,7 @@ public class GoodsAdapter extends Adapter {
         }
     }
 
-    static class FooterViewHolder extends ViewHolder {
+    static class FooterViewHolder extends ViewHolder{
         @Bind(R.id.tvFooter)
         TextView tvFooter;
 
