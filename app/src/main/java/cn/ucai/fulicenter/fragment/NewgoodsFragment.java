@@ -25,6 +25,7 @@ import cn.ucai.fulicenter.utils.L;
 import cn.ucai.fulicenter.adapter.GoodsAdapter;
 import cn.ucai.fulicenter.bean.NewGoodsBean;
 import cn.ucai.fulicenter.net.NetDao;
+import cn.ucai.fulicenter.view.SpaceItemDecoration;
 
 /**
  * Created by Administrator on 2016/10/17.
@@ -150,6 +151,7 @@ public class NewgoodsFragment extends Fragment {
         mRv.setLayoutManager(glm);
         mRv.setHasFixedSize(true);
         mRv.setAdapter(mAdapter);
+        mRv.addItemDecoration(new SpaceItemDecoration(12));
     }
 
     @Override
