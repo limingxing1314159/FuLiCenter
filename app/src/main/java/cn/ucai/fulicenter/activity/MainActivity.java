@@ -13,8 +13,10 @@ import butterknife.ButterKnife;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.fragment.BoutiqueFragment;
 import cn.ucai.fulicenter.fragment.NewgoodsFragment;
+import cn.ucai.fulicenter.utils.L;
+import cn.ucai.fulicenter.utils.MFGT;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     @Bind(R.id.btnNewGoods)
     RadioButton mbtnNewGoods;
@@ -38,11 +40,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        initView();
-        initFragment();
+        L.i("MainActivity.onCreate");
+        super.onCreate(savedInstanceState);
     }
 
     private void initFragment() {
@@ -60,7 +61,8 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    private void initView() {
+    @Override
+    protected void initView() {
         rbs = new RadioButton[5];
         rbs[0] = mbtnNewGoods;
         rbs[1] = mbtnBoutique;
@@ -68,6 +70,17 @@ public class MainActivity extends AppCompatActivity {
         rbs[3] = mlayoutCart;
         rbs[4] = mbtnMe;
     }
+
+    @Override
+    protected void initData() {
+        initFragment();
+    }
+
+    @Override
+    protected void setListener() {
+
+    }
+
     public void onCheckedChange(View v){
         switch (v.getId()){
             case R.id.btnNewGoods:
@@ -110,5 +123,8 @@ public class MainActivity extends AppCompatActivity {
                 rbs[i].setChecked(false);
             }
         }
+    }
+    public void onBackPressed(){
+        finish();
     }
 }
