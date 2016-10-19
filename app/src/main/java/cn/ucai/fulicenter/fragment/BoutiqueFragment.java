@@ -31,7 +31,7 @@ import cn.ucai.fulicenter.view.SpaceItemDecoration;
 /**
  * Created by Administrator on 2016/10/19.
  */
-public class BoutiqueFragment extends Fragment {
+public class BoutiqueFragment extends BaseFragment {
     @Bind(R.id.tv_refresh)
     TextView mTvRefresh;
     @Bind(R.id.rv)
@@ -49,35 +49,43 @@ public class BoutiqueFragment extends Fragment {
         View layout = inflater.inflate(R.layout.fragment_newgoods, container, false);
         ButterKnife.bind(this, layout);
         mContext = (MainActivity) getContext();
+        mList = new ArrayList<>();
         mAdapter = new BoutiqueAdapter(mContext,mList);
-        initView();
-        initData();
+        super.onCreateView(inflater,container,savedInstanceState);
         return layout;
     }
 
-    private void initData() {
-        downloadBoutique(I.ACTION_DOWNLOAD);
+    @Override
+    protected void setListener() {
+        setPullDownListener();
+
     }
 
-    private void downloadBoutique(final int action) {
+    private void setPullDownListener() {
+        mSrl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mSrl.setRefreshing(true);
+                mTvRefresh.setVisibility(View.VISIBLE);
+                downloadBoutique();
+            }
+        });
+    }
+
+    @Override
+    protected void initData() {
+        downloadBoutique();
+    }
+
+    private void downloadBoutique() {
         NetDao.downloadBoutique(mContext, new OkHttpUtils.OnCompleteListener<BoutiqueBean[]>() {
             @Override
             public void onSuccess(BoutiqueBean[] result) {
                 mSrl.setRefreshing(false);
                 mTvRefresh.setVisibility(View.GONE);
-                mAdapter.setMore(true);
                 if (result != null && result.length > 0){
                     ArrayList<BoutiqueBean> list = ConvertUtils.array2List(result);
-                    if (action ==I.ACTION_DOWNLOAD || action ==I.ACTION_PULL_DOWN){
                         mAdapter.initData(list);
-                    }else {
-                        mAdapter.addData(list);
-                    }
-                    if (list.size()<I.PAGE_SIZE_DEFAULT){
-                        mAdapter.setMore(false);
-                    }
-                }else {
-                    mAdapter.setMore(false);
                 }
             }
 
@@ -85,15 +93,14 @@ public class BoutiqueFragment extends Fragment {
             public void onError(String error) {
                 mSrl.setRefreshing(false);
                 mTvRefresh.setVisibility(View.GONE);
-                mAdapter.setMore(false);
                 CommonUtils.showShortToast(error);
                 L.e("error"+error);
             }
         });
-
     }
 
-    private void initView() {
+    @Override
+    protected void initView() {
         mSrl.setColorSchemeColors(
                 getResources().getColor(R.color.google_blue),
                 getResources().getColor(R.color.google_green),
