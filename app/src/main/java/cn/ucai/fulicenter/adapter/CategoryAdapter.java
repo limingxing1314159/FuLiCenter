@@ -80,7 +80,6 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
             holder = new GroupViewHolder(view);
             view.setTag(holder);
         } else {
-            view.getTag();
             holder = (GroupViewHolder) view.getTag();
         }
         CategoryGroupBean group = getGroup(groupPosition);
@@ -100,7 +99,6 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
             holder = new ChildViewHolder(view);
             view.setTag(holder);
         } else {
-            view.getTag();
             holder = (ChildViewHolder) view.getTag();
         }
         final CategoryChildBean child = getChild(groupPosition, childPosition);

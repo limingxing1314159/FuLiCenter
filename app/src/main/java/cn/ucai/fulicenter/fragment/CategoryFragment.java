@@ -90,6 +90,7 @@ public class CategoryFragment extends BaseFragment {
                 if (result!=null && result.length>0) {
                     ArrayList<CategoryChildBean> childList = ConvertUtils.array2List(result);
                     L.e("childList="+childList.size());
+//                    mChildList.add(childList);
                     mChildList.set(index,childList);
                 }
                 if (groupCount==mGroupList.size()){
