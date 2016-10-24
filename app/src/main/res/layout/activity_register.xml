@@ -32,7 +32,8 @@
                 android:id="@+id/username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="user-name"/>
+                android:hint="用户名"
+                android:layout_alignParentBottom="true"/>
 
         </RelativeLayout>
 
@@ -54,7 +55,7 @@
                android:id="@+id/nick"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
-               android:hint="user-nickname"
+               android:hint="用户昵称"
                android:layout_alignParentBottom="true" />
        </RelativeLayout>
         <RelativeLayout
@@ -75,7 +76,7 @@
                 android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="password"
+                android:hint="密码"
                 android:layout_alignParentBottom="true" />
         </RelativeLayout>
         <RelativeLayout
@@ -90,13 +91,13 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
-                android:src="@drawable/icon_account"/>
+                android:src="@drawable/icon_pwd"/>
 
             <EditText
                 android:id="@+id/confirm_Password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="confirm password"
+                android:hint="确认密码"
                 android:layout_alignParentBottom="true" />
         </RelativeLayout>
 
@@ -118,7 +119,7 @@
                 android:background="@drawable/tb_btn_login_orange_normal"
                 android:paddingBottom="7dp"
                 android:paddingTop="7dp"
-                android:text="@string/register"
+                android:text="免费注册"
                 android:textColor="@android:color/white"
                 android:textSize="20sp"/>
 
