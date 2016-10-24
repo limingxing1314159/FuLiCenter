@@ -8,17 +8,17 @@
         android:id="@+id/srl"
         android:background="@color/list_background"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <include layout="@layout/layout_refresh_title"/>
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
             </android.support.v7.widget.RecyclerView>
         </LinearLayout>

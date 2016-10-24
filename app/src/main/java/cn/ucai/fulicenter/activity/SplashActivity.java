@@ -1,6 +1,5 @@
 package cn.ucai.fulicenter.activity;
 
-import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,8 +8,9 @@ import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.utils.MFGT;
 
 public class SplashActivity extends AppCompatActivity {
-    private final long sleepTime = 2000;
-    Handler handler = new Handler();
+
+    private final long sleepTime = 3000;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,7 +26,6 @@ public class SplashActivity extends AppCompatActivity {
                 MFGT.gotoMainActivity(SplashActivity.this);
                 finish();
             }
-        },sleepTime);
-
+        }, sleepTime);
     }
 }

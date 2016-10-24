@@ -1,8 +1,11 @@
 package cn.ucai.fulicenter.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 
-public class BoutiqueBean implements Serializable {
+public class BoutiqueBean implements Parcelable {
 
     /**
      * id : 262
@@ -17,6 +20,26 @@ public class BoutiqueBean implements Serializable {
     private String description;
     private String name;
     private String imageurl;
+
+    protected BoutiqueBean(Parcel in) {
+        id = in.readInt();
+        title = in.readString();
+        description = in.readString();
+        name = in.readString();
+        imageurl = in.readString();
+    }
+
+    public static final Creator<BoutiqueBean> CREATOR = new Creator<BoutiqueBean>() {
+        @Override
+        public BoutiqueBean createFromParcel(Parcel in) {
+            return new BoutiqueBean(in);
+        }
+
+        @Override
+        public BoutiqueBean[] newArray(int size) {
+            return new BoutiqueBean[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -67,5 +90,19 @@ public class BoutiqueBean implements Serializable {
                 ", name='" + name + '\'' +
                 ", imageurl='" + imageurl + '\'' +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(title);
+        dest.writeString(description);
+        dest.writeString(name);
+        dest.writeString(imageurl);
     }
 }

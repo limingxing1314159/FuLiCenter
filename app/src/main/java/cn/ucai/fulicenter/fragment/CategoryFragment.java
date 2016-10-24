@@ -13,13 +13,13 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.activity.MainActivity;
+import cn.ucai.fulicenter.utils.ConvertUtils;
+import cn.ucai.fulicenter.utils.L;
 import cn.ucai.fulicenter.adapter.CategoryAdapter;
 import cn.ucai.fulicenter.bean.CategoryChildBean;
 import cn.ucai.fulicenter.bean.CategoryGroupBean;
 import cn.ucai.fulicenter.net.NetDao;
-import cn.ucai.fulicenter.net.OkHttpUtils;
-import cn.ucai.fulicenter.utils.ConvertUtils;
-import cn.ucai.fulicenter.utils.L;
+import cn.ucai.fulicenter.utils.OkHttpUtils;
 
 /**
  * Created by Administrator on 2016/10/20.
@@ -32,13 +32,14 @@ public class CategoryFragment extends BaseFragment {
     MainActivity mContext;
     ArrayList<CategoryGroupBean> mGroupList;
     ArrayList<ArrayList<CategoryChildBean>> mChildList;
+
     int groupCount;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_category, container, false);
-        ButterKnife.bind(this, layout);
+        ButterKnife.bind(this,layout);
         mContext = (MainActivity) getContext();
         mGroupList = new ArrayList<>();
         mChildList = new ArrayList<>();
@@ -55,6 +56,7 @@ public class CategoryFragment extends BaseFragment {
 
     @Override
     protected void initData() {
+        //下载
         downloadGroup();
     }
 
@@ -62,12 +64,12 @@ public class CategoryFragment extends BaseFragment {
         NetDao.downloadCategoryGroup(mContext, new OkHttpUtils.OnCompleteListener<CategoryGroupBean[]>() {
             @Override
             public void onSuccess(CategoryGroupBean[] result) {
-                L.e("downloadGroup,result="+result);
-                if (result!=null && result.length>0){
+                L.e("downloadGroup,result+"+result);
+                if (result != null && result.length>0){
                     ArrayList<CategoryGroupBean> groupList = ConvertUtils.array2List(result);
                     L.e("groupList="+groupList.size());
                     mGroupList.addAll(groupList);
-                    for (int i=0;i<groupList.size();i++ ){
+                    for (int i = 0;i<groupList.size();i++){
                         mChildList.add(new ArrayList<CategoryChildBean>());
                         CategoryGroupBean g = groupList.get(i);
                         downloadChild(g.getId(),i);
@@ -86,11 +88,11 @@ public class CategoryFragment extends BaseFragment {
         NetDao.downloadCategoryChild(mContext, id, new OkHttpUtils.OnCompleteListener<CategoryChildBean[]>() {
             @Override
             public void onSuccess(CategoryChildBean[] result) {
-                L.e("downloadChild,result="+result);
-                if (result!=null && result.length>0) {
+                groupCount++;
+                L.e("downloadChild,result+"+result);
+                if (result != null && result.length>0){
                     ArrayList<CategoryChildBean> childList = ConvertUtils.array2List(result);
                     L.e("childList="+childList.size());
-//                    mChildList.add(childList);
                     mChildList.set(index,childList);
                 }
                 if (groupCount==mGroupList.size()){
@@ -100,10 +102,9 @@ public class CategoryFragment extends BaseFragment {
 
             @Override
             public void onError(String error) {
-                L.e("error="+error);
+
             }
         });
-
     }
 
     @Override

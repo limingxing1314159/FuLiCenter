@@ -8,13 +8,17 @@ import cn.ucai.fulicenter.bean.CategoryChildBean;
 import cn.ucai.fulicenter.bean.CategoryGroupBean;
 import cn.ucai.fulicenter.bean.GoodsDetailsBean;
 import cn.ucai.fulicenter.bean.NewGoodsBean;
+import cn.ucai.fulicenter.bean.Result;
+import cn.ucai.fulicenter.utils.MD5;
+import cn.ucai.fulicenter.utils.OkHttpUtils;
 
 /**
  * Created by Administrator on 2016/10/17.
  */
 public class NetDao {
+    // 新品
     public static void downloadNewGoods(Context context, int catId,int pageId, OkHttpUtils.OnCompleteListener<NewGoodsBean[]> listener) {
-        OkHttpUtils utils = new OkHttpUtils(context);
+        OkHttpUtils<NewGoodsBean[]> utils = new OkHttpUtils<>(context);
         utils.setRequestUrl(I.REQUEST_FIND_NEW_BOUTIQUE_GOODS)
                 .addParam(I.NewAndBoutiqueGoods.CAT_ID, String.valueOf(catId))
                 .addParam(I.PAGE_ID, String.valueOf(pageId))
@@ -23,39 +27,65 @@ public class NetDao {
                 .execute(listener);
     }
 
-    public static void downloadGoodsDetail(Context context, int goodsId, OkHttpUtils.OnCompleteListener<GoodsDetailsBean> listener){
-        OkHttpUtils utils = new OkHttpUtils(context);
+    public static void downloadGoodsDetail(Context context, int goodsId, OkHttpUtils.OnCompleteListener<GoodsDetailsBean> listener) {
+        OkHttpUtils<GoodsDetailsBean> utils = new OkHttpUtils<>(context);
         utils.setRequestUrl(I.REQUEST_FIND_GOOD_DETAILS)
                 .addParam(I.GoodsDetails.KEY_GOODS_ID,String.valueOf(goodsId))
                 .targetClass(GoodsDetailsBean.class)
                 .execute(listener);
+
     }
-    public static void downloadBoutique(Context context, OkHttpUtils.OnCompleteListener<BoutiqueBean[]> lister){
-        OkHttpUtils utils = new OkHttpUtils(context);
-        utils.setRequestUrl(I.REQUEST_FIND_BOUTIQUES)
+// 精选
+    public static void downloadBuotique(Context context, OkHttpUtils.OnCompleteListener<BoutiqueBean[]> listener){
+        OkHttpUtils<BoutiqueBean[]>  utils = new OkHttpUtils<>(context);
+        utils .setRequestUrl(I.REQUEST_FIND_BOUTIQUES)
                 .targetClass(BoutiqueBean[].class)
-                .execute(lister);
+                .execute(listener);
     }
-    public static void downloadCategoryGroup(Context context, OkHttpUtils.OnCompleteListener<CategoryGroupBean[]> lister){
-        OkHttpUtils utils = new OkHttpUtils(context);
+
+    // 分类
+    public static void downloadCategoryGroup(Context context,OkHttpUtils.OnCompleteListener<CategoryGroupBean[]> listener){
+        OkHttpUtils<CategoryGroupBean[]> utils = new OkHttpUtils<>(context);
         utils.setRequestUrl(I.REQUEST_FIND_CATEGORY_GROUP)
                 .targetClass(CategoryGroupBean[].class)
-                .execute(lister);
+                .execute(listener);
     }
-    public static void downloadCategoryChild(Context context, int parentId,OkHttpUtils.OnCompleteListener<CategoryChildBean[]> lister){
-        OkHttpUtils utils = new OkHttpUtils(context);
+
+    public static void downloadCategoryChild(Context context, int parentId, OkHttpUtils.OnCompleteListener<CategoryChildBean[]> listener) {
+        OkHttpUtils<CategoryChildBean[]> utils = new OkHttpUtils<>(context);
         utils.setRequestUrl(I.REQUEST_FIND_CATEGORY_CHILDREN)
-                .addParam(I.CategoryChild.PARENT_ID,String.valueOf(parentId))
+                .addParam(I.CategoryChild.PARENT_ID, String.valueOf(parentId))
                 .targetClass(CategoryChildBean[].class)
-                .execute(lister);
+                .execute(listener);
     }
+    // 分类二级
     public static void downloadCategoryGoods(Context context, int catId,int pageId, OkHttpUtils.OnCompleteListener<NewGoodsBean[]> listener) {
-        OkHttpUtils utils = new OkHttpUtils(context);
-        utils.setRequestUrl(I.REQUEST_FIND_GOODS_DETAILS)
+        OkHttpUtils<NewGoodsBean[]> utils = new OkHttpUtils<>(context);
+        utils.setRequestUrl(I.REQUEST_FIND_GOOD_DETAILS)
                 .addParam(I.NewAndBoutiqueGoods.CAT_ID, String.valueOf(catId))
                 .addParam(I.PAGE_ID, String.valueOf(pageId))
                 .addParam(I.PAGE_SIZE, String.valueOf(I.PAGE_SIZE_DEFAULT))
                 .targetClass(NewGoodsBean[].class)
+                .execute(listener);
+    }
+
+    public static void register(Context context, String username, String nickname,String password, OkHttpUtils.OnCompleteListener<Result> listener){
+        OkHttpUtils<Result> utils = new OkHttpUtils<>(context);
+        utils.setRequestUrl(I.REQUEST_REGISTER)
+                .addParam(I.User.USER_NAME,username)
+                .addParam(I.User.NICK,nickname)
+                .addParam(I.User.PASSWORD,MD5.getMessageDigest(password))
+                .targetClass(Result.class)
+                .post()
+                .execute(listener);
+    }
+
+    public static void login(Context context,String username,String password,OkHttpUtils.OnCompleteListener<Result> listener){
+        OkHttpUtils<Result> utils = new OkHttpUtils<>(context);
+        utils.setRequestUrl(I.REQUEST_LOGIN)
+                .addParam(I.User.USER_NAME,username)
+                .addParam(I.User.PASSWORD,MD5.getMessageDigest(password))
+                .targetClass(Result.class)
                 .execute(listener);
     }
 }

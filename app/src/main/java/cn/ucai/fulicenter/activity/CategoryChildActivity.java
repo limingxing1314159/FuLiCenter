@@ -20,7 +20,7 @@ import cn.ucai.fulicenter.adapter.GoodsAdapter;
 import cn.ucai.fulicenter.bean.CategoryChildBean;
 import cn.ucai.fulicenter.bean.NewGoodsBean;
 import cn.ucai.fulicenter.net.NetDao;
-import cn.ucai.fulicenter.net.OkHttpUtils;
+import cn.ucai.fulicenter.utils.OkHttpUtils;
 import cn.ucai.fulicenter.utils.CommonUtils;
 import cn.ucai.fulicenter.utils.ConvertUtils;
 import cn.ucai.fulicenter.utils.L;
@@ -31,11 +31,11 @@ import cn.ucai.fulicenter.view.SpaceItemDecoration;
 public class CategoryChildActivity extends BaseActivity {
 
     @Bind(R.id.tv_refresh)
-    TextView tvRefresh;
+    TextView mTvRefresh;
     @Bind(R.id.rv)
-    RecyclerView rv;
+    RecyclerView mRv;
     @Bind(R.id.srl)
-    SwipeRefreshLayout srl;
+    SwipeRefreshLayout mSrl;
 
     CategoryChildActivity mContext;
     GoodsAdapter mAdapter;
@@ -44,14 +44,14 @@ public class CategoryChildActivity extends BaseActivity {
     GridLayoutManager glm;
     int catId;
     @Bind(R.id.btn_sort_price)
-    Button btnSortPrice;
+    Button mBtnSortPrice;
     @Bind(R.id.btn_sort_addtime)
-    Button btnSortAddtime;
+    Button mBtnSortAddtime;
     boolean addTimeAsc = false;
     boolean priceAsc = false;
     int sortBy = I.SORT_BY_ADDTIME_DESC;
     @Bind(R.id.btnCatChildFilter)
-    CatChildFilterButton btnCatChildFilter;
+    CatChildFilterButton mBtnCatChildFilter;
     String groupName;
     ArrayList<CategoryChildBean> mChildList;
 
@@ -66,40 +66,44 @@ public class CategoryChildActivity extends BaseActivity {
         if (catId == 0) {
             finish();
         }
-        groupName = getIntent().getStringExtra(I.CategoryGroup.NAME);
+        groupName = getIntent().getStringExtra(I.CategoryChild.NAME);
         mChildList = (ArrayList<CategoryChildBean>) getIntent().getSerializableExtra(I.CategoryChild.ID);
         super.onCreate(savedInstanceState);
     }
 
     @Override
     protected void initView() {
-        srl.setColorSchemeColors(
+        mSrl.setColorSchemeColors(
                 getResources().getColor(R.color.google_blue),
                 getResources().getColor(R.color.google_green),
                 getResources().getColor(R.color.google_red),
                 getResources().getColor(R.color.google_yellow)
         );
         glm = new GridLayoutManager(mContext, I.COLUM_NUM);
-        rv.setLayoutManager(glm);
-        rv.setHasFixedSize(true);
-        rv.setAdapter(mAdapter);
-        rv.addItemDecoration(new SpaceItemDecoration(12));
-        btnCatChildFilter.setText(groupName);
+        mRv.setLayoutManager(glm);
+        mRv.setHasFixedSize(true);
+        mRv.setAdapter(mAdapter);
+        mRv.addItemDecoration(new SpaceItemDecoration(12));
+        mBtnCatChildFilter.setText(groupName);
+        L.e("筛选="+groupName);
     }
 
     @Override
     protected void setListener() {
         setPullUpListener();
         setPullDownListener();
-
     }
 
+
+    /**
+     * 下啦刷新
+     */
     private void setPullDownListener() {
-        srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mSrl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                srl.setRefreshing(true);
-                tvRefresh.setVisibility(View.VISIBLE);
+                mSrl.setRefreshing(true);
+                mTvRefresh.setVisibility(View.VISIBLE);
                 pageId = 1;
                 downloadCategoryGoods(I.ACTION_PULL_DOWN);
             }
@@ -107,12 +111,13 @@ public class CategoryChildActivity extends BaseActivity {
     }
 
     private void downloadCategoryGoods(final int action) {
-        NetDao.downloadCategoryGoods(mContext, catId, pageId, new OkHttpUtils.OnCompleteListener<NewGoodsBean[]>() {
+        NetDao.downloadNewGoods(mContext, catId, pageId, new OkHttpUtils.OnCompleteListener<NewGoodsBean[]>() {
             @Override
             public void onSuccess(NewGoodsBean[] result) {
-                srl.setRefreshing(false);
-                tvRefresh.setVisibility(View.GONE);
+                mSrl.setRefreshing(false);
+                mTvRefresh.setVisibility(View.GONE);
                 mAdapter.setMore(true);
+                L.e("result" + result);
                 if (result != null && result.length > 0) {
                     ArrayList<NewGoodsBean> list = ConvertUtils.array2List(result);
                     if (action == I.ACTION_DOWNLOAD || action == I.ACTION_PULL_DOWN) {
@@ -120,7 +125,7 @@ public class CategoryChildActivity extends BaseActivity {
                     } else {
                         mAdapter.addData(list);
                     }
-                    if (list.size() < I.PAGE_SIZE_DEFAULT) {
+                    if (list.size() < I.PAGE_SIZE_DEFAULT) {//如果6<10
                         mAdapter.setMore(false);
                     }
                 } else {
@@ -130,18 +135,17 @@ public class CategoryChildActivity extends BaseActivity {
 
             @Override
             public void onError(String error) {
-                srl.setRefreshing(false);
-                tvRefresh.setVisibility(View.GONE);
+                mSrl.setRefreshing(false);
+                mTvRefresh.setVisibility(View.GONE);
                 mAdapter.setMore(false);
                 CommonUtils.showShortToast(error);
                 L.e("error" + error);
             }
         });
-
     }
 
     private void setPullUpListener() {
-        rv.setOnScrollListener(new RecyclerView.OnScrollListener() {
+        mRv.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -158,7 +162,7 @@ public class CategoryChildActivity extends BaseActivity {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 int firstPosition = glm.findFirstVisibleItemPosition();
-                srl.setEnabled(firstPosition == 0);
+                mSrl.setEnabled(firstPosition == 0);
             }
         });
     }
@@ -166,9 +170,8 @@ public class CategoryChildActivity extends BaseActivity {
     @Override
     protected void initData() {
         downloadCategoryGoods(I.ACTION_DOWNLOAD);
-        btnCatChildFilter.setOnCatFilterClickListener(groupName,mChildList);
+        mBtnCatChildFilter.setOnCatFilterClickListener(groupName,mChildList);
     }
-
 
     @OnClick(R.id.backClickArea)
     public void onClick() {
@@ -188,7 +191,7 @@ public class CategoryChildActivity extends BaseActivity {
                     right = getResources().getDrawable(R.mipmap.arrow_order_down);
                 }
                 right.setBounds(0, 0, right.getIntrinsicWidth(), right.getIntrinsicHeight());
-                btnSortPrice.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, right, null);
+                mBtnSortPrice.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, right, null);
                 priceAsc = !priceAsc;
                 break;
             case R.id.btn_sort_addtime:
@@ -200,10 +203,10 @@ public class CategoryChildActivity extends BaseActivity {
                     right = getResources().getDrawable(R.mipmap.arrow_order_down);
                 }
                 right.setBounds(0, 0, right.getIntrinsicWidth(), right.getIntrinsicHeight());
-                btnSortAddtime.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, right, null);
+                mBtnSortAddtime.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, right, null);
                 addTimeAsc = !addTimeAsc;
                 break;
         }
-        mAdapter.setSortBy(sortBy);
+        mAdapter.setSoryBy(sortBy);
     }
 }

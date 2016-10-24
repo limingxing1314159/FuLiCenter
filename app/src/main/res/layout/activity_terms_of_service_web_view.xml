@@ -12,5 +12,7 @@
         android:id="@+id/wv_terms_of_service"
         android:layout_width="match_parent"
         android:background="@color/error_item_color"
-        android:layout_height="match_parent"></WebView>
+        android:layout_height="match_parent">
+
+    </WebView>
 </LinearLayout>

@@ -13,10 +13,11 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.utils.ImageLoader;
+import cn.ucai.fulicenter.utils.L;
+import cn.ucai.fulicenter.utils.MFGT;
 import cn.ucai.fulicenter.bean.CategoryChildBean;
 import cn.ucai.fulicenter.bean.CategoryGroupBean;
-import cn.ucai.fulicenter.utils.ImageLoader;
-import cn.ucai.fulicenter.utils.MFGT;
 
 /**
  * Created by Administrator on 2016/10/20.
@@ -37,11 +38,13 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getGroupCount() {
+        //获取大类的数量
         return mGroupList != null ? mGroupList.size() : 0;
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
+        //小类的数量
         return mChildList != null && mChildList.get(groupPosition) != null ?
                 mChildList.get(groupPosition).size() : 0;
     }
@@ -80,6 +83,7 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
             holder = new GroupViewHolder(view);
             view.setTag(holder);
         } else {
+            view.getTag();
             holder = (GroupViewHolder) view.getTag();
         }
         CategoryGroupBean group = getGroup(groupPosition);
@@ -92,7 +96,7 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getChildView(final int groupPosition, int childPosition, boolean isLastChild, View view, ViewGroup viewGroup) {
+    public View getChildView(final int groupPosition, int childPosition, boolean isLastChild, View view, ViewGroup parent) {
         ChildViewHolder holder;
         if (view == null) {
             view = View.inflate(mContext, R.layout.item_category_child, null);
@@ -102,15 +106,17 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
             holder = (ChildViewHolder) view.getTag();
         }
         final CategoryChildBean child = getChild(groupPosition, childPosition);
-        if (child!=null){
-            ImageLoader.downloadImg(mContext,holder.mIvCategoryChildThumb,child.getImageUrl());
+        if (child != null) {
+            ImageLoader.downloadImg(mContext, holder.mIvCategoryChildThumb, child.getImageUrl());
             holder.mTvCategoryChildName.setText(child.getName());
             holder.mLayoutCategoryChild.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     ArrayList<CategoryChildBean> list = mChildList.get(groupPosition);
                     String groupName = mGroupList.get(groupPosition).getName();
+                    L.e("111111111="+groupName);
                     MFGT.gotoCategoryChildActivity(mContext,child.getId(),groupName,list);
+                    L.e("66666="+groupName);
                 }
             });
         }
@@ -127,13 +133,12 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
         if (mGroupList!=null){
             mGroupList.clear();
         }
-        mGroupList.addAll(groupList);
+       mGroupList.addAll(groupList);
         if (mChildList!=null){
             mChildList.clear();
         }
         mChildList.addAll(childList);
         notifyDataSetChanged();
-
     }
 
     class GroupViewHolder {
@@ -149,7 +154,7 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
         }
     }
 
-    class ChildViewHolder {
+     class ChildViewHolder {
         @Bind(R.id.iv_category_child_thumb)
         ImageView mIvCategoryChildThumb;
         @Bind(R.id.tv_category_child_name)

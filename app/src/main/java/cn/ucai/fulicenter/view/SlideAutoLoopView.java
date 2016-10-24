@@ -20,6 +20,7 @@ import java.util.TimerTask;
 
 import cn.ucai.fulicenter.utils.ImageLoader;
 
+
 /**
  * 图片轮播
  * @author yao
@@ -116,6 +117,7 @@ public class SlideAutoLoopView extends ViewPager {
     }
 
     /**
+
      * 轮播图片的适配器
      * @author yao
      *

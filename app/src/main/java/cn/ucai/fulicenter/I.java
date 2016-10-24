@@ -18,6 +18,8 @@ public interface I {
     int TYPE_ITEM=0;
     int TYPE_FOOTER=1;
 
+    int REQUEST_CODE_REGISTER = 101;
+
     /** BeeColud APP ID */
     String BEE_COLUD_APP_ID = "3539b590-4859-4128-87a3-5fb8b86b94f6";
     /** BeeColud APP Secret*/
@@ -42,9 +44,11 @@ public interface I {
     String ACTION_TYPE_PERSONAL = "personal";
     String ACTION_TYPE_CART = "cart";
 
-    /** 添加收藏*/
-    int ACTION_ADD_COLLECT=1;
-    /** 取消收藏*/
+    /**
+     * 添加收藏
+     */
+    int ACTION_ADD_COLLECT = 1;
+    /** 取消收藏 */
     int ACTION_DELETE_COLLECT=2;
     
     int NEW_GOOD=0;

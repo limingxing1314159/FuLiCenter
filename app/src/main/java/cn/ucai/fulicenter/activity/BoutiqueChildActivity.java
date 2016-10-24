@@ -14,27 +14,27 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
-import cn.ucai.fulicenter.adapter.GoodsAdapter;
-import cn.ucai.fulicenter.bean.BoutiqueBean;
-import cn.ucai.fulicenter.bean.NewGoodsBean;
-import cn.ucai.fulicenter.net.NetDao;
-import cn.ucai.fulicenter.net.OkHttpUtils;
 import cn.ucai.fulicenter.utils.CommonUtils;
 import cn.ucai.fulicenter.utils.ConvertUtils;
 import cn.ucai.fulicenter.utils.L;
 import cn.ucai.fulicenter.utils.MFGT;
+import cn.ucai.fulicenter.adapter.GoodsAdapter;
+import cn.ucai.fulicenter.bean.BoutiqueBean;
+import cn.ucai.fulicenter.bean.NewGoodsBean;
+import cn.ucai.fulicenter.net.NetDao;
+import cn.ucai.fulicenter.utils.OkHttpUtils;
 import cn.ucai.fulicenter.view.SpaceItemDecoration;
 
 public class BoutiqueChildActivity extends BaseActivity {
 
     @Bind(R.id.tv_common_title)
-    TextView tvCommonTitle;
+    TextView mTvCommonTitle;
     @Bind(R.id.tv_refresh)
-    TextView tvRefresh;
+    TextView mTvRefresh;
     @Bind(R.id.rv)
-    RecyclerView rv;
+    RecyclerView mRv;
     @Bind(R.id.srl)
-    SwipeRefreshLayout srl;
+    SwipeRefreshLayout mSrl;
 
     BoutiqueChildActivity mContext;
     GoodsAdapter mAdapter;
@@ -47,10 +47,11 @@ public class BoutiqueChildActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_boutique_child);
         ButterKnife.bind(this);
-        boutique = (BoutiqueBean) getIntent().getSerializableExtra(I.Boutique.CAT_ID);
+        boutique = (BoutiqueBean) getIntent().getParcelableExtra(I.Boutique.CAT_ID);
         if (boutique == null){
             finish();
         }
+        L.i("boutique="+boutique.toString());
         mContext = this;
         mList = new ArrayList<>();
         mAdapter = new GoodsAdapter(mContext, mList);
@@ -59,33 +60,36 @@ public class BoutiqueChildActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        srl.setColorSchemeColors(
+        mSrl.setColorSchemeColors(
                 getResources().getColor(R.color.google_blue),
                 getResources().getColor(R.color.google_green),
                 getResources().getColor(R.color.google_red),
                 getResources().getColor(R.color.google_yellow)
         );
         glm = new GridLayoutManager(mContext, I.COLUM_NUM);
-        rv.setLayoutManager(glm);
-        rv.setHasFixedSize(true);
-        rv.setAdapter(mAdapter);
-        rv.addItemDecoration(new SpaceItemDecoration(12));
-        tvCommonTitle.setText(boutique.getTitle());
+        mRv.setLayoutManager(glm);
+        mRv.setHasFixedSize(true);
+        mRv.setAdapter(mAdapter);
+        mRv.addItemDecoration(new SpaceItemDecoration(12));
+        mTvCommonTitle.setText(boutique.getTitle());
     }
 
     @Override
     protected void setListener() {
         setPullUpListener();
         setPullDownListener();
-
     }
 
+
+    /**
+     * 下啦刷新
+     */
     private void setPullDownListener() {
-        srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mSrl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
             @Override
             public void onRefresh() {
-                srl.setRefreshing(true);
-                tvRefresh.setVisibility(View.VISIBLE);
+                mSrl.setRefreshing(true);
+                mTvRefresh.setVisibility(View.VISIBLE);
                 pageId = 1;
                 downloadNewGoods(I.ACTION_PULL_DOWN);
             }
@@ -93,58 +97,57 @@ public class BoutiqueChildActivity extends BaseActivity {
     }
 
     private void downloadNewGoods(final int action) {
-        NetDao.downloadNewGoods(mContext, boutique.getId(),pageId,new OkHttpUtils.OnCompleteListener<NewGoodsBean[]>(){
+        NetDao.downloadNewGoods(mContext, boutique.getId(),pageId, new OkHttpUtils.OnCompleteListener<NewGoodsBean[]>() {
             @Override
             public void onSuccess(NewGoodsBean[] result) {
-                srl.setRefreshing(false);
-                tvRefresh.setVisibility(View.GONE);
+                mSrl.setRefreshing(false);
+                mTvRefresh.setVisibility(View.GONE);
                 mAdapter.setMore(true);
-                if (result != null && result.length > 0){
+                L.e("result"+result);
+                if (result != null && result.length > 0) {
                     ArrayList<NewGoodsBean> list = ConvertUtils.array2List(result);
-                    if (action ==I.ACTION_DOWNLOAD || action ==I.ACTION_PULL_DOWN){
+                    if (action==I.ACTION_DOWNLOAD || action == I.ACTION_PULL_DOWN){
                         mAdapter.initData(list);
                     }else {
                         mAdapter.addData(list);
                     }
-                    if (list.size()<I.PAGE_SIZE_DEFAULT){
+                    if (list.size() < I.PAGE_SIZE_DEFAULT) {//如果6<10
                         mAdapter.setMore(false);
                     }
-                }else {
+                } else {
                     mAdapter.setMore(false);
                 }
             }
 
             @Override
             public void onError(String error) {
-                srl.setRefreshing(false);
-                tvRefresh.setVisibility(View.GONE);
+                mSrl.setRefreshing(false);
+                mTvRefresh.setVisibility(View.GONE);
                 mAdapter.setMore(false);
                 CommonUtils.showShortToast(error);
-                L.e("error"+error);
+                L.e("error" + error);
             }
         });
-
     }
 
     private void setPullUpListener() {
-        rv.setOnScrollListener(new RecyclerView.OnScrollListener() {
+        mRv.setOnScrollListener(new RecyclerView.OnScrollListener(){
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 int lastPosition = glm.findLastVisibleItemPosition();
                 if (newState == RecyclerView.SCROLL_STATE_IDLE
-                        && lastPosition ==mAdapter.getItemCount()-1
+                        && lastPosition == mAdapter.getItemCount()-1
                         && mAdapter.isMore()){
                     pageId++;
                     downloadNewGoods(I.ACTION_PULL_UP);
                 }
             }
-
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 int firstPosition = glm.findFirstVisibleItemPosition();
-                srl.setEnabled(firstPosition ==0);
+                mSrl.setEnabled(firstPosition==0);
             }
         });
     }

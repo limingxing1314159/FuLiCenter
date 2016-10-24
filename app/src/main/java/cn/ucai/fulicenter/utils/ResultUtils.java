@@ -1,4 +1,5 @@
 package cn.ucai.fulicenter.utils;
+
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -13,7 +14,6 @@ import java.util.List;
 
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.bean.Result;
-
 
 public class ResultUtils {
     public static <T> Result getResultFromJson(String jsonStr, Class<T> clazz){

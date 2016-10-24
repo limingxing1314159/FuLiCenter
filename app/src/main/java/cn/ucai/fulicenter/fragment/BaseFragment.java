@@ -9,12 +9,14 @@ import android.view.ViewGroup;
 
 import cn.ucai.fulicenter.utils.L;
 
-
-public abstract class BaseFragment extends Fragment{
+/**
+ * Created by Administrator on 2016/10/19.
+ */
+public abstract class BaseFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        L.e("BaseFragment.onCreateView");
+        L.e("NewgoodsFragment.onCreateView");
         initView();
         initData();
         setListener();
