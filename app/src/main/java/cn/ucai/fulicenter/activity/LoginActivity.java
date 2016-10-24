@@ -116,9 +116,9 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onError(String error) {
+                pd.dismiss();
                 CommonUtils.showLongToast(error);
                 L.e(TAG,"error="+error);
-
             }
         });
     }
