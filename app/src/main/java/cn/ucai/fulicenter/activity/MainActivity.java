@@ -11,6 +11,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.fragment.PersonalCenterFragment;
 import cn.ucai.fulicenter.utils.L;
 import cn.ucai.fulicenter.fragment.BoutiqueFragment;
 import cn.ucai.fulicenter.fragment.CategoryFragment;
@@ -39,6 +40,7 @@ public class MainActivity extends BaseActivity {
     NewgoodsFragment mNewgoodsFragment;
     BoutiqueFragment mBoutiqueFragment;
     CategoryFragment mCategoryFragment;
+    PersonalCenterFragment mPersonalCenterFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,7 @@ public class MainActivity extends BaseActivity {
         mNewgoodsFragment = new NewgoodsFragment();
         mBoutiqueFragment = new BoutiqueFragment();
         mCategoryFragment = new CategoryFragment();
+        mPersonalCenterFragment = new PersonalCenterFragment();
         mFragments[0] = mNewgoodsFragment;
         mFragments[1] = mBoutiqueFragment;
         mFragments[2] = mCategoryFragment;
@@ -101,7 +104,7 @@ public class MainActivity extends BaseActivity {
                 index = 2;
                 break;
             case R.id.personal:
-                if(FuLiCenterApplication.getUsername()==null){
+                if(FuLiCenterApplication.getUser()==null){
                     MFGT.gotoLogin(this);
                 }else {
                     index = 3;
@@ -119,14 +122,14 @@ public class MainActivity extends BaseActivity {
     private void setFragments(){
         if (index!=currentIndex){
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.hide(mFragments[currentIndex]);
             if (!mFragments[index].isAdded()){
                 ft.add(R.id.fragment_container,mFragments[index]);
             }
-            ft.hide(mFragments[currentIndex]);
             ft.show(mFragments[index]).commit();
         }
-        currentIndex = index;
         setRadioButtonStatus();
+        currentIndex = index;
     }
 
     private void setRadioButtonStatus() {
