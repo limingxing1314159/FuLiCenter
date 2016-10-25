@@ -5,7 +5,7 @@ package cn.ucai.fulicenter.bean;
  */
 public class User {
     private String muserName;
-    private String myserNick;
+    private String muserNick;
     private int mavatarId;
     private String mavatarPath;
     private String mavatarSuffix;
@@ -20,12 +20,12 @@ public class User {
         this.muserName = muserName;
     }
 
-    public String getMyserNick() {
-        return myserNick;
+    public String getMuserNick() {
+        return muserNick;
     }
 
     public void setMyserNick(String myserNick) {
-        this.myserNick = myserNick;
+        this.muserNick = myserNick;
     }
 
     public int getMavatarId() {
@@ -72,7 +72,7 @@ public class User {
     public String toString() {
         return "User{" +
                 "muserName='" + muserName + '\'' +
-                ", myserNick='" + myserNick + '\'' +
+                ", myserNick='" + muserNick + '\'' +
                 ", mavatarId=" + mavatarId +
                 ", mavatarPath='" + mavatarPath + '\'' +
                 ", mavatarSuffix='" + mavatarSuffix + '\'' +

@@ -64,6 +64,7 @@ public class MainActivity extends BaseActivity {
         mFragments[0] = mNewgoodsFragment;
         mFragments[1] = mBoutiqueFragment;
         mFragments[2] = mCategoryFragment;
+        mFragments[3] = mPersonalCenterFragment;
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.fragment_container, mNewgoodsFragment)

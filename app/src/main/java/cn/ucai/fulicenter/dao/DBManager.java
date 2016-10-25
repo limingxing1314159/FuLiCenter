@@ -30,7 +30,7 @@ public class DBManager {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(UserDao.USER_COLUMN_NAME,user.getMuserName());
-        values.put(UserDao.USER_COLUMN_NICK,user.getMyserNick());
+        values.put(UserDao.USER_COLUMN_NICK,user.getMuserNick());
         values.put(UserDao.USER_COLUMN_AVATAR_ID,user.getMavatarId());
         values.put(UserDao.USER_COLUMN_AVATAR_TYPE,user.getMavatarType());
         values.put(UserDao.USER_COLUMN_AVATAR_PATH,user.getMavatarPath());
@@ -67,7 +67,7 @@ public class DBManager {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         String sql = UserDao.USER_COLUMN_NAME + "=?";
         ContentValues values = new ContentValues();
-        values.put(UserDao.USER_COLUMN_NICK,user.getMyserNick());
+        values.put(UserDao.USER_COLUMN_NICK,user.getMuserNick());
         if (db.isOpen()){
             result = db.update(UserDao.USER_TABLE_NAME,values,sql,new String[]{user.getMuserName()});
         }
