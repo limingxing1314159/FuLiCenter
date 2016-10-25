@@ -26,4 +26,8 @@
     <string name="login_fail_error_password">login fail,error password</string>
     <string name="user_database_error">user database error</string>
     <string name="user_profile">user_profile</string>
+    <string name="username_connot_be_modify">username_connot_be_modify</string>
+    <string name="update_user_nick">update_user_nick</string>
+    <string name="update_nick_fail_unmodify">update_nick_fail_unmodify</string>
+    <string name="update_user_nick_success">update_user_nick_success</string>
 </resources>
