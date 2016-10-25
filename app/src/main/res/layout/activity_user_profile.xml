@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_upload_avatar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="cn.ucai.fulicenter.activity.UserProfileActivity">
@@ -77,7 +78,6 @@
             android:scaleType="centerCrop"
             android:src="@drawable/right_arrow_icon"/>
         <TextView
-            android:id="@+id/tv_user_profile_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="用户名"
@@ -85,6 +85,14 @@
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:textColor="@color/black"/>
+        <TextView
+            android:id="@+id/tv_user_profile_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="5dip"
+            android:scaleType="centerCrop"
+            android:layout_toLeftOf="@id/user_arrow1"/>
     </RelativeLayout>
         <View
             android:layout_width="match_parent"
@@ -109,7 +117,6 @@
                 android:src="@drawable/right_arrow_icon"/>
 
             <TextView
-                android:id="@+id/tv_user_profile_nick"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
@@ -117,6 +124,14 @@
                 android:textSize="25sp"
                 android:gravity="center_vertical"
                 android:textColor="@color/black" />
+            <TextView
+                android:id="@+id/tv_user_profile_nick"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_margin="5dip"
+                android:scaleType="centerCrop"
+                android:layout_toLeftOf="@id/user_arrow2"/>
         </RelativeLayout>
     </LinearLayout>
     <Button

@@ -42,7 +42,7 @@ public class MFGT {
     }
 
     public static void startActivity(Context context,Intent intent){
-       context.startActivity(intent);
+        context.startActivity(intent);
         ((Activity)context).overridePendingTransition(R.anim.push_left_in,R.anim.push_bottom_out);
     }
     public static void gotoBoutiqueChildActivity(Context context, BoutiqueBean bean){
@@ -79,11 +79,10 @@ public class MFGT {
     }
 
     public static void gotoSettings(Activity context){
-        startActivity(context, UserProfileActivity.class);
+      startActivity(context, UserProfileActivity.class);
     }
-
     public static void gotoUpdateNick(Activity context){
-        startActivityForResult(context,new Intent(context, UpdateNickActivity.class),I.REQUEST_CODE_NICK);
+      startActivityForResult(context,new Intent(context, UpdateNickActivity.class),I.REQUEST_CODE_NICK);
     }
 
 }
