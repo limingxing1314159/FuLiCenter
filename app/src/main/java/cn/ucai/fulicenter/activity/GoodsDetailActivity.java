@@ -3,6 +3,7 @@ package cn.ucai.fulicenter.activity;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -10,14 +11,17 @@ import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.bean.AlbumsBean;
+import cn.ucai.fulicenter.bean.GoodsDetailsBean;
+import cn.ucai.fulicenter.bean.MessageBean;
+import cn.ucai.fulicenter.bean.User;
+import cn.ucai.fulicenter.net.NetDao;
 import cn.ucai.fulicenter.utils.CommonUtils;
 import cn.ucai.fulicenter.utils.L;
 import cn.ucai.fulicenter.utils.MFGT;
-import cn.ucai.fulicenter.bean.AlbumsBean;
-import cn.ucai.fulicenter.bean.GoodsDetailsBean;
-import cn.ucai.fulicenter.net.NetDao;
 import cn.ucai.fulicenter.utils.OkHttpUtils;
 import cn.ucai.fulicenter.view.FlowIndicator;
 import cn.ucai.fulicenter.view.SlideAutoLoopView;
@@ -47,6 +51,9 @@ public class GoodsDetailActivity extends BaseActivity {
 
     int goodsId;
     GoodsDetailActivity mContent;
+    boolean isCollected = false;
+    @Bind(R.id.iv_goods_collect)
+    ImageView ivGoodsCollect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +128,12 @@ public class GoodsDetailActivity extends BaseActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isCollected();
+    }
+
     @OnClick(R.id.backClickArea)
     public void onBackClick() {
         MFGT.finish(this);
@@ -128,5 +141,37 @@ public class GoodsDetailActivity extends BaseActivity {
 
     public void back(View v) {
         MFGT.finish(this);
+    }
+
+    public void isCollected() {
+        User user = FuLiCenterApplication.getUser();
+        if (user != null) {
+            NetDao.isColected(mContent, user.getMuserName(), goodsId, new OkHttpUtils.OnCompleteListener<MessageBean>() {
+                @Override
+                public void onSuccess(MessageBean result) {
+                    if (result != null && result.isSuccess()) {
+                        isCollected = true;
+                    }else {
+                        isCollected = false;
+                        updateGoodsCollectStatus();
+                    }
+                }
+
+                @Override
+                public void onError(String error) {
+                    isCollected = false;
+                    updateGoodsCollectStatus();
+                }
+            });
+        }
+        updateGoodsCollectStatus();
+    }
+
+    private void updateGoodsCollectStatus() {
+        if (isCollected) {
+            ivGoodsCollect.setImageResource(R.mipmap.bg_collect_out);
+        } else {
+            ivGoodsCollect.setImageResource(R.mipmap.bg_collect_in);
+        }
     }
 }

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/good_detail_bg"
-    tools:context=".activity.GoodsDetailActivity">
+    tools:context="cn.ucai.fulicenter.activity.GoodsDetailActivity">
     <!--调用另一个页面写好的head_title-->
     <RelativeLayout
         android:id="@+id/layout_title"
