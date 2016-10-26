@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import butterknife.Bind;
@@ -95,6 +96,11 @@ public class PersonalCenterFragment extends BaseFragment {
         MFGT.gotoSettings(mContext);
     }
 
+    @OnClick(R.id.layout_center_collect)
+    public void gotoCollectsList(){
+        MFGT.gotoCollects(mContext);
+    }
+
     private void syncUserInfo() {
         NetDao.syncUserInfo(mContext, user.getMuserName(), new OkHttpUtils.OnCompleteListener<String>() {
             @Override
@@ -128,7 +134,7 @@ public class PersonalCenterFragment extends BaseFragment {
             public void onSuccess(MessageBean result) {
                 if (result != null && result.isSuccess()) {
                     tvCollectCount.setText(result.getMsg());
-                }else {
+                } else {
                     tvCollectCount.setText(String.valueOf(0));
                 }
             }
@@ -136,7 +142,7 @@ public class PersonalCenterFragment extends BaseFragment {
             @Override
             public void onError(String error) {
                 tvCollectCount.setText(String.valueOf(0));
-                L.e(TAG,"error="+error);
+                L.e(TAG, "error=" + error);
             }
         });
     }
