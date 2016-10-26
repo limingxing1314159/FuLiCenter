@@ -51,7 +51,7 @@ public class DBManager {
         if (cursor.moveToNext()){
             user = new User();
             user.setMuserName(username);
-            user.setMyserNick(cursor.getString(cursor.getColumnIndex(UserDao.USER_COLUMN_NICK)));
+            user.setMuserNick(cursor.getString(cursor.getColumnIndex(UserDao.USER_COLUMN_NICK)));
             user.setMavatarId(cursor.getInt(cursor.getColumnIndex(UserDao.USER_COLUMN_AVATAR_ID)));
             user.setMavatarType(cursor.getInt(cursor.getColumnIndex(UserDao.USER_COLUMN_AVATAR_TYPE)));
             user.setMavatarPath(cursor.getString(cursor.getColumnIndex(UserDao.USER_COLUMN_AVATAR_PATH)));

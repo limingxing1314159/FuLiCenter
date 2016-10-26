@@ -14,10 +14,16 @@ import butterknife.OnClick;
 import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.activity.MainActivity;
+import cn.ucai.fulicenter.bean.MessageBean;
+import cn.ucai.fulicenter.bean.Result;
 import cn.ucai.fulicenter.bean.User;
+import cn.ucai.fulicenter.dao.UserDao;
+import cn.ucai.fulicenter.net.NetDao;
 import cn.ucai.fulicenter.utils.ImageLoader;
 import cn.ucai.fulicenter.utils.L;
 import cn.ucai.fulicenter.utils.MFGT;
+import cn.ucai.fulicenter.utils.OkHttpUtils;
+import cn.ucai.fulicenter.utils.ResultUtils;
 
 /**
  * Created by Administrator on 2016/10/24.
@@ -31,6 +37,8 @@ public class PersonalCenterFragment extends BaseFragment {
 
     MainActivity mContext;
     User user = null;
+    @Bind(R.id.tv_collect_count)
+    TextView tvCollectCount;
 
     @Nullable
     @Override
@@ -50,11 +58,11 @@ public class PersonalCenterFragment extends BaseFragment {
     @Override
     protected void initData() {
         user = FuLiCenterApplication.getUser();
-        L.e(TAG,"user="+user);
-        if (user==null){
+        L.e(TAG, "user=" + user);
+        if (user == null) {
             MFGT.gotoLogin(mContext);
-        }else {
-            ImageLoader.setAvatar(ImageLoader.getAvatarUrl(user),mContext,ivUserAvatar);
+        } else {
+            ImageLoader.setAvatar(ImageLoader.getAvatarUrl(user), mContext, ivUserAvatar);
             tvUserName.setText(user.getMuserNick());
         }
     }
@@ -67,10 +75,12 @@ public class PersonalCenterFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         user = FuLiCenterApplication.getUser();
-        L.e(TAG,"user="+user);
-        if (user!=null){
-            ImageLoader.setAvatar(ImageLoader.getAvatarUrl(user),mContext,ivUserAvatar);
+        L.e(TAG, "user=" + user);
+        if (user != null) {
+            ImageLoader.setAvatar(ImageLoader.getAvatarUrl(user), mContext, ivUserAvatar);
             tvUserName.setText(user.getMuserNick());
+            syncUserInfo();
+            syncCollectsCount();
         }
     }
 
@@ -80,8 +90,54 @@ public class PersonalCenterFragment extends BaseFragment {
         ButterKnife.unbind(this);
     }
 
-    @OnClick({R.id.tv_center_settings,R.id.center_user_info})
+    @OnClick({R.id.tv_center_settings, R.id.center_user_info})
     public void gotoSettings() {
         MFGT.gotoSettings(mContext);
+    }
+
+    private void syncUserInfo() {
+        NetDao.syncUserInfo(mContext, user.getMuserName(), new OkHttpUtils.OnCompleteListener<String>() {
+            @Override
+            public void onSuccess(String s) {
+                Result result1 = ResultUtils.getResultFromJson(s, User.class);
+                if (result1 != null) {
+                    User u = (User) result1.getRetData();
+                    if (!user.equals(u)) {
+                        UserDao dao = new UserDao(mContext);
+                        boolean b = dao.saveUser(u);
+                        if (b) {
+                            FuLiCenterApplication.setUser(u);
+                            user = u;
+                            ImageLoader.setAvatar(ImageLoader.getAvatarUrl(user), mContext, ivUserAvatar);
+                            tvUserName.setText(user.getMuserNick());
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
+    }
+
+    private void syncCollectsCount() {
+        NetDao.getCollectsCount(mContext, user.getMuserName(), new OkHttpUtils.OnCompleteListener<MessageBean>() {
+            @Override
+            public void onSuccess(MessageBean result) {
+                if (result != null && result.isSuccess()) {
+                    tvCollectCount.setText(result.getMsg());
+                }else {
+                    tvCollectCount.setText(String.valueOf(0));
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+                tvCollectCount.setText(String.valueOf(0));
+                L.e(TAG,"error="+error);
+            }
+        });
     }
 }
