@@ -7,7 +7,6 @@
 
     <include layout="@layout/common_head_title_white"/>
     <LinearLayout
-        android:layout_below="@id/common_head_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <include layout="@layout/fragment_newgoods"/>
