@@ -175,6 +175,7 @@ public class CartFragment extends BaseFragment {
             tvCartSumPrice.setText("合计：￥"+Double.valueOf(ranPrice));
             tvCartSavePrice.setText("节省：￥"+Double.valueOf(sumPrice-ranPrice));
         }else {
+            setCartLayout(false);
             tvCartSumPrice.setText("合计：￥0");
             tvCartSavePrice.setText("节省：￥0");
         }
@@ -189,6 +190,7 @@ public class CartFragment extends BaseFragment {
         public void onReceive(Context context, Intent intent) {
             L.e(TAG,"updateCartReceiver...");
             sumPrice();
+            setCartLayout(mList!=null && mList.size()>0);
         }
     }
 
