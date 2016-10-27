@@ -19,6 +19,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.bean.CartBean;
+import cn.ucai.fulicenter.bean.GoodsDetailsBean;
+import cn.ucai.fulicenter.utils.ImageLoader;
 import cn.ucai.fulicenter.utils.L;
 import cn.ucai.fulicenter.utils.MFGT;
 
@@ -45,12 +47,14 @@ public class CartAdapter extends Adapter<CartAdapter.CartViewHolder> {
     @Override
     public void onBindViewHolder(CartViewHolder holder, int position) {
         CartBean cartBean = mList.get(position);
-//            ImageLoader.downloadImg(mContext,holder.mLvBoutiqueImg,boutiqueBean.getImageurl());
-//            holder.mTvBoutiqueTitle.setText(boutiqueBean.getTitle());
-//            holder.mTvBoutiqueName.setText(boutiqueBean.getName());
-//            holder.mTvBoutiqueDescription.setText(boutiqueBean.getDescription());
-//            holder.mLayoutBoutiqueItem.setTag(boutiqueBean);
-//        L.i("1111111" + boutiqueBean.toString());
+        GoodsDetailsBean goods = cartBean.getGoods();
+        if (goods!=null){
+            ImageLoader.downloadImg(mContext,holder.ivCartThumb,goods.getGoodsThumb());
+            holder.tvCartGoodName.setText(goods.getGoodsName());
+            holder.tvCartPrice.setText(goods.getCurrencyPrice());
+        }
+        holder.tvCartCount.setText("("+cartBean.getCount()+")");
+        holder.cbCartSelected.setChecked(false);
     }
 
     @Override
